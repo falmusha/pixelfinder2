@@ -10,4 +10,11 @@ RSpec.describe Manufacturer, type: :model do
     end
   end
 
+  describe 'associations' do
+    it 'has many camera' do
+      assc = described_class.reflect_on_association(:cameras)
+      expect(assc.macro).to eq :has_many
+    end
+  end
+
 end

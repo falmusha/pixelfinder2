@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :image do
     association :creator
-    camera_id 1 # NIKON D810
+    association :camera
     lens_id 1 # 300.0 mm f/4.0
     aperture 'f/5.6'
     shutter_speed '1/1250'

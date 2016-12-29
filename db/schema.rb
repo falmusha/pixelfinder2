@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161228223701) do
+ActiveRecord::Schema.define(version: 20161229003016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cameras", force: :cascade do |t|
+    t.string   "model"
+    t.float    "resolution"
+    t.integer  "manufacturer_id"
+    t.integer  "sensor_type_id"
+    t.integer  "mount_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["manufacturer_id"], name: "index_cameras_on_manufacturer_id", using: :btree
+    t.index ["sensor_type_id"], name: "index_cameras_on_sensor_type_id", using: :btree
+  end
 
   create_table "creators", force: :cascade do |t|
     t.string   "name"
@@ -49,4 +61,6 @@ ActiveRecord::Schema.define(version: 20161228223701) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "cameras", "manufacturers"
+  add_foreign_key "cameras", "sensor_types"
 end
