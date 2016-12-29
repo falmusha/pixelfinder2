@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161229003016) do
+ActiveRecord::Schema.define(version: 20161229063718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,21 @@ ActiveRecord::Schema.define(version: 20161229003016) do
     t.datetime "updated_at",    null: false
   end
 
+  create_table "lenses", force: :cascade do |t|
+    t.string   "model"
+    t.float    "min_aperture"
+    t.float    "max_aperture"
+    t.integer  "min_focal_length"
+    t.integer  "max_focal_length"
+    t.integer  "manufacturer_id"
+    t.integer  "sensor_type_id"
+    t.integer  "mount_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["manufacturer_id"], name: "index_lenses_on_manufacturer_id", using: :btree
+    t.index ["sensor_type_id"], name: "index_lenses_on_sensor_type_id", using: :btree
+  end
+
   create_table "manufacturers", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -63,4 +78,6 @@ ActiveRecord::Schema.define(version: 20161229003016) do
 
   add_foreign_key "cameras", "manufacturers"
   add_foreign_key "cameras", "sensor_types"
+  add_foreign_key "lenses", "manufacturers"
+  add_foreign_key "lenses", "sensor_types"
 end

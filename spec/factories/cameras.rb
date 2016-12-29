@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :camera do
-    model 'Nikon D810'
+    sequence(:model) { |n| "Camera#{n}" }
     resolution 1.5
     association :manufacturer
     association :sensor_type

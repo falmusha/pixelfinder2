@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :creator do
-    name 'Fahad Almusharraf'
-    email 'ifahad7@gmail.com'
-    website 'ifahad7.com'
+    sequence(:name) {|n| "creator#{n}"}
+    email 'creator@gmail.com'
+    website 'creator.com'
   end
 end

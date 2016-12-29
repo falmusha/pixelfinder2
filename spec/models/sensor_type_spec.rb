@@ -15,6 +15,10 @@ RSpec.describe SensorType, type: :model do
       assc = described_class.reflect_on_association(:cameras)
       expect(assc.macro).to eq :has_many
     end
+    it 'has many lenses' do
+      assc = described_class.reflect_on_association(:lenses)
+      expect(assc.macro).to eq :has_many
+    end
   end
 
 end

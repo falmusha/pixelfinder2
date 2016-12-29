@@ -1,20 +1,20 @@
 require 'rails_helper'
 
-RSpec.describe Camera, type: :model do
+RSpec.describe Lens, type: :model do
   describe 'validations' do
     it 'does not allow duplicate models per manufacturer' do
       nikon = create(:manufacturer, name: 'Nikon')
-      create(:camera, manufacturer: nikon, model: 'D810')
-      camera = build(:camera, manufacturer: nikon, model: 'D810')
-      camera.valid?
-      expect(camera.errors[:model]).to include('has already been taken')
+      create(:lens, manufacturer: nikon, model: 'D810')
+      lens = build(:lens, manufacturer: nikon, model: 'D810')
+      lens.valid?
+      expect(lens.errors[:model]).to include('has already been taken')
     end
     it 'allows two manufacturers to share the same model' do
       nikon = create(:manufacturer, name: 'Nikon')
       canon = create(:manufacturer, name: 'Canon')
-      create(:camera, manufacturer: nikon, model: 'D810')
-      camera = build(:camera, manufacturer: canon, model: 'D810')
-      expect(camera).to be_valid
+      create(:lens, manufacturer: nikon, model: 'D810')
+      lens = build(:lens, manufacturer: canon, model: 'D810')
+      expect(lens).to be_valid
     end
   end
 

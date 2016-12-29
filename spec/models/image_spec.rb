@@ -16,6 +16,14 @@ RSpec.describe Image, type: :model do
       assc = described_class.reflect_on_association(:creator)
       expect(assc.macro).to eq :belongs_to
     end
+    it 'belongs to camera' do
+      assc = described_class.reflect_on_association(:camera)
+      expect(assc.macro).to eq :belongs_to
+    end
+    it 'belongs to lens' do
+      assc = described_class.reflect_on_association(:lens)
+      expect(assc.macro).to eq :belongs_to
+    end
   end
 
 end

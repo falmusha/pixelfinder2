@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :sensor_type do
-    name 'full-frame'
+    sequence(:name) { |n| "sensor-#{n}" }
   end
 end
