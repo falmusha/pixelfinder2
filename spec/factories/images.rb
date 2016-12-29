@@ -7,7 +7,9 @@ FactoryGirl.define do
     shutter_speed '1/1250'
     iso 400
     focal_length 300
-    sequence(:url) { |n| "http://url#{n}" }
+    sequence(:page_url) { |n| "http://page_url#{n}" }
+    sequence(:image_url) { |n| "http://image_url#{n}" }
+    sequence(:thumbnail_url) { |n| "http://thumbnail_url#{n}" }
     exif {{
       'camera'        => 'NIKON D810',
       'lens'          => '300.0 mm',
