@@ -15,7 +15,7 @@ module PixelFinder
         def interesting_photos(per_page, page)
           flickr.interestingness.getList(per_page: per_page, page: page)
         end
-        
+
         def info(photo)
           begin
             info = flickr.photos.getInfo(photo_id: photo.id,
@@ -42,7 +42,7 @@ module PixelFinder
             Rails.logger.warn("FlickrApiWrapper::#{e.class}::#{e.message}")
             return nil
           end
-          return raw_exif
+          raw_exif
         end
 
       end
