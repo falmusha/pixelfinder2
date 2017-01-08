@@ -30,7 +30,7 @@ module PixelFinder
         def urls(info)
           urls = { page_url:      FlickRaw.url_photopage(info),
                    image_url:     FlickRaw.url_b(info),
-                   thumbnail_url: FlickRaw.url_t(info) }
+                   thumbnail_url: FlickRaw.url_n(info) }
           urls
         end
 

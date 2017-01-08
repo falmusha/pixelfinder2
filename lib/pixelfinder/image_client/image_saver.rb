@@ -35,7 +35,7 @@ module PixelFinder
           if lens[:make].blank?
             lens = Lens.find_or_create_by(model: lens[:model])
           else
-            manufacturer = get_manufacturer(lens[:make])
+            manufacturer = find_manufacturer(lens[:make])
             lens = Lens.find_or_create_by(model: lens[:model],
                                           manufacturer: manufacturer)
           end
