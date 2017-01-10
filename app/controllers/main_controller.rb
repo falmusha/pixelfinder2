@@ -7,7 +7,7 @@ class MainController < ApplicationController
 
   def search
     if params[:commit].blank?
-      @images = Image.page(params[:page]).per(5)
+      @images = Image.page(params[:page]).per(PER_PAGE)
     else
       filters = {}
       if params[:camera].present?
