@@ -1,24 +1,31 @@
 <div class="search-page">
-    <%= form_tag('/search', method: 'get', id: 'filters', class: 'filters-list') do %>
-      <div class="filter">
-        <%= text_field_tag(:camera, nil, placeholder: 'camera name') %>
+  <%= form_tag '/search', method: 'get', id: 'filters', class: 'filters-list'  do %>
+    <div class="filter">
+      <%= text_field_tag :camera, nil, placeholder: 'camera name'  %>
+    </div>
+    <div class="filter">
+      <%= text_field_tag :lens, nil, placeholder: 'lens name'  %>
+    </div>
+    <div class="filter">
+      <%= text_field_tag :focal_length, nil, placeholder: 'focal length'  %>
+    </div>
+    <div class="filter">
+      <%= text_field_tag :aperture, nil, placeholder: 'aperture'  %>
+    </div>
+    <div class="filter">
+      <%= text_field_tag :shutter_speed, nil, placeholder: 'shutter speed'  %>
+    </div>
+    <div class="filter">
+      <%= text_field_tag :iso, nil, placeholder: 'iso'  %>
+    </div>
+    <%= submit_tag "search", style: 'display: none'  %>
+  <% end %>
+  <div class="images-list">
+    <% @images.each do |image| %>
+      <div class="image">
+        <%= link_to image_tag(image[:thumbnail_url]), image[:page_url] %>
       </div>
-      <div class="filter">
-        <%= text_field_tag(:lens, nil, placeholder: 'lens name') %>
-      </div>
-      <div class="filter">
-        <%= text_field_tag(:focal_length, nil, placeholder: 'focal length') %>
-      </div>
-      <div class="filter">
-        <%= text_field_tag(:aperture, nil, placeholder: 'aperture') %>
-      </div>
-      <div class="filter">
-        <%= text_field_tag(:shutter_speed, nil, placeholder: 'shutter speed') %>
-      </div>
-      <div class="filter">
-        <%= text_field_tag(:iso, nil, placeholder: 'iso') %>
-      </div>
-      <%= submit_tag("search", {style: 'display: none'}) %>
     <% end %>
-  <%= render 'main/images' %>
+  </div>
+  <%= paginate @images unless @images.empty? %>
 </div>

@@ -1,5 +1,7 @@
 class MainController < ApplicationController
 
+  PER_PAGE = 5
+
   def index
   end
 
@@ -7,7 +9,6 @@ class MainController < ApplicationController
     if params[:commit].blank?
       @images = Image.page(params[:page]).per(5)
     else
-      # @images = Image.joins(:camera).where cameras: { model: params[:camera] }
       filters = {}
       if params[:camera].present?
         filters[:camera] = Camera.find_by(model: params[:camera])
@@ -21,7 +22,7 @@ class MainController < ApplicationController
       if filters.blank?
         @images = {}
       else
-        @images = Image.where(filters).page(params[:page]).per(5)
+        @images = Image.where(filters).page(params[:page]).per(PER_PAGE)
       end
     end
   end
