@@ -8,8 +8,24 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <%= render 'layouts/header' %>
-    <%= yield %>
+  <% if is_home_page? %>
+    <body class="cover">
+  <% else %>
+    <body>
+  <% end %>
+
+    <nav class="navigation">
+      <ul>
+        <li class="header">Pixelfinder</li>
+        <li><%= link_to "Home",       '/' %></li>
+        <li><%= link_to "Search",     '/search' %></li>
+        <li><%= link_to "About",      '#' %></li>
+        <li><%= link_to "Contact Us", '#' %></li>
+      </ul>
+    </nav>
+
+    <div id="main-container">
+      <%= yield %>
+    </div>
   </body>
 </html>
