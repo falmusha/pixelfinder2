@@ -3,36 +3,37 @@ require 'rubygems'
 require 'oauth'
 require 'multi_json'
 
-CONSUMER_KEY = Rails.application.secrets.five00px_consumer_key
-CONSUMER_SECRET = Rails.application.secrets.five00px_consumer_secret
-USERNAME = Rails.application.secrets.five00px_username
-PASSWORD = Rails.application.secrets.five00px_password
-
-BASE_URL = 'https://api.500px.com'
-
 module PixelFinder
   module ImageClient
 
     class FiveHundredPxClient < ImageSourceClient
 
+      BASE_URL = 'https://api.500px.com'
+      LARGE_IMAGE_PARAM = 1080
+      SMALL_IMAGE_PARAM = 30
+
       def initialize
-        p "get_access_token: Initializing Consumer"
-        consumer = OAuth::Consumer.new(CONSUMER_KEY, CONSUMER_SECRET, {
-          :site               => BASE_URL,
-          :request_token_path => "/v1/oauth/request_token",
-          :access_token_path  => "/v1/oauth/access_token",
-          :authorize_path     => "/v1/oauth/authorize"})
+        Rails.logger.info("500PxClient::get_access_token: Initializing Consumer")
+        consumer = OAuth::Consumer.new(
+          Rails.application.secrets._500px_consumer_key,
+          Rails.application.secrets._500px_consumer_secret,
+          { :site               => BASE_URL,
+            :request_token_path => "/v1/oauth/request_token",
+            :access_token_path  => "/v1/oauth/access_token",
+            :authorize_path     => "/v1/oauth/authorize"})
 
         request_token = consumer.get_request_token()
-        p "Request URL: #{request_token.authorize_url}"
+        Rails.logger.info("500PxClient::Request URL: #{request_token.authorize_url}")
         @access_token = consumer.get_access_token(
-          request_token, {}, { :x_auth_mode => 'client_auth',
-                               :x_auth_username => USERNAME,
-                               :x_auth_password => PASSWORD })
+          request_token, {},
+          { :x_auth_mode => 'client_auth',
+            :x_auth_username => Rails.application.secrets._500px_username,
+            :x_auth_password => Rails.application.secrets._500px_password })
       end
 
       def fetch_photos(num_of_photos)
-        params = "featrue=popular&rpp=#{num_of_photos}&image_size=1080,30"
+        params = "featrue=popular&rpp=#{num_of_photos}"\
+          "&image_size=#{LARGE_IMAGE_PARAM},#{SMALL_IMAGE_PARAM}"
         photos = MultiJson.decode(@access_token.get("/v1/photos?#{params}").body)['photos']
         images(photos)
       end
@@ -55,13 +56,12 @@ module PixelFinder
         creator = photo['user']['fullname'].presence || photo['user']['username']
         image[:creator] = creator
 
-        image[:page_url] = "https://500px/photo/#{photo['id']}"
-        #image[:page_url] = photo['url']
         urls = photo['images']
         urls.each do |url|
-          image[:image_url] = url['url'] if url['size'] == 1080
-          image[:thumbnail_url] = url['url'] if url['size'] == 30
+          image[:image_url] = url['url'] if url['size'] == LARGE_IMAGE_PARAM
+          image[:thumbnail_url] = url['url'] if url['size'] == SMALL_IMAGE_PARAM
         end
+        image[:page_url] = "https://500px.com/photo/#{photo['id']}"
         image[:exif] = photo
         image
       end
@@ -84,25 +84,3 @@ module PixelFinder
     end
   end
 end
-
-#def get_access_token
-#  p "get_access_token: Initializing Consumer"
-#  consumer = OAuth::Consumer.new(CONSUMER_KEY, CONSUMER_SECRET, {
-#  :site               => BASE_URL,
-#  :request_token_path => "/v1/oauth/request_token",
-#  :access_token_path  => "/v1/oauth/access_token",
-#  :authorize_path     => "/v1/oauth/authorize"})
-#
-#  request_token = consumer.get_request_token()
-#  p "Request URL: #{request_token.authorize_url}"
-#  access_token = consumer.get_access_token(request_token, {}, { :x_auth_mode => 'client_auth', :x_auth_username => USERNAME, :x_auth_password => PASSWORD })
-#  access_token
-#end
-
-#access_token = get_access_token
-#p "token: #{access_token.token}"
-#p "secret: #{access_token.secret}"
-
-
-#p access_token.get('/v1/photos.json').body
-#p MultiJson.decode(access_token.get('/v1/users.json').body).inspect
