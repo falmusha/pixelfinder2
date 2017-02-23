@@ -29,6 +29,29 @@
   }
 }
 
+#filters-form .filters-list ul.autocomplete-list {
+  display: none;
+  position: absolute;
+  box-shadow: 1px 2px 6px;
+  background-color: #fff;
+  color: #333;
+  transition: left 0.1s ease-in-out;
+  z-index: 1;
+}
+
+#filters-form .filters-list ul.autocomplete-list.shown {
+  display: block;
+}
+
+#filters-form .filters-list ul.autocomplete-list li {
+  display: none;
+  list-style: none;
+}
+
+#filters-form .filters-list ul.autocomplete-list li.shown {
+  display: block;
+}
+
 #search-page .images-list {
   display: flex;
   flex-flow: row wrap;
