@@ -15,68 +15,68 @@ ActiveRecord::Schema.define(version: 20161229201340) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "cameras", force: :cascade do |t|
-    t.string   "model"
-    t.float    "resolution"
-    t.integer  "manufacturer_id"
-    t.integer  "sensor_type_id"
-    t.integer  "mount_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.index ["manufacturer_id"], name: "index_cameras_on_manufacturer_id", using: :btree
-    t.index ["sensor_type_id"], name: "index_cameras_on_sensor_type_id", using: :btree
+  create_table "cameras", id: :serial, force: :cascade do |t|
+    t.string "model"
+    t.float "resolution"
+    t.integer "manufacturer_id"
+    t.integer "sensor_type_id"
+    t.integer "mount_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["manufacturer_id"], name: "index_cameras_on_manufacturer_id"
+    t.index ["sensor_type_id"], name: "index_cameras_on_sensor_type_id"
   end
 
-  create_table "creators", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "website"
+  create_table "creators", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "images", force: :cascade do |t|
-    t.string   "page_url"
-    t.integer  "creator_id"
-    t.integer  "camera_id"
-    t.integer  "lens_id"
-    t.string   "aperture"
-    t.string   "shutter_speed"
-    t.integer  "iso"
-    t.integer  "focal_length"
-    t.jsonb    "exif"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "thumbnail_url"
-    t.string   "image_url"
-    t.index ["camera_id"], name: "index_images_on_camera_id", using: :btree
-    t.index ["creator_id"], name: "index_images_on_creator_id", using: :btree
-    t.index ["lens_id"], name: "index_images_on_lens_id", using: :btree
+  create_table "images", id: :serial, force: :cascade do |t|
+    t.string "page_url"
+    t.integer "creator_id"
+    t.integer "camera_id"
+    t.integer "lens_id"
+    t.string "aperture"
+    t.string "shutter_speed"
+    t.integer "iso"
+    t.integer "focal_length"
+    t.jsonb "exif"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "thumbnail_url"
+    t.string "image_url"
+    t.index ["camera_id"], name: "index_images_on_camera_id"
+    t.index ["creator_id"], name: "index_images_on_creator_id"
+    t.index ["lens_id"], name: "index_images_on_lens_id"
   end
 
-  create_table "lenses", force: :cascade do |t|
-    t.string   "model"
-    t.float    "min_aperture"
-    t.float    "max_aperture"
-    t.integer  "min_focal_length"
-    t.integer  "max_focal_length"
-    t.integer  "manufacturer_id"
-    t.integer  "sensor_type_id"
-    t.integer  "mount_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.index ["manufacturer_id"], name: "index_lenses_on_manufacturer_id", using: :btree
-    t.index ["sensor_type_id"], name: "index_lenses_on_sensor_type_id", using: :btree
+  create_table "lenses", id: :serial, force: :cascade do |t|
+    t.string "model"
+    t.float "min_aperture"
+    t.float "max_aperture"
+    t.integer "min_focal_length"
+    t.integer "max_focal_length"
+    t.integer "manufacturer_id"
+    t.integer "sensor_type_id"
+    t.integer "mount_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["manufacturer_id"], name: "index_lenses_on_manufacturer_id"
+    t.index ["sensor_type_id"], name: "index_lenses_on_sensor_type_id"
   end
 
-  create_table "manufacturers", force: :cascade do |t|
-    t.string   "name"
+  create_table "manufacturers", id: :serial, force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "sensor_types", force: :cascade do |t|
-    t.string   "name"
+  create_table "sensor_types", id: :serial, force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
