@@ -31,12 +31,33 @@ module PixelFinder
             :x_auth_password => Rails.application.secrets._500px_password })
       end
 
+      def api_photos_request_wrapper(per_page, page)
+        params = "featrue=popular"\
+          "&page=#{page}"\
+          "&rpp=#{per_page}"\
+          "&image_size=#{LARGE_IMAGE_PARAM},#{SMALL_IMAGE_PARAM}"\
+          "&exclude=Nude"
+        begin
+          response = @access_token.get("/v1/photos?#{params}").body
+          photos = JSON.parse(response)['photos']
+        rescue Exception => e
+          Rails.logger.warn("500PxApiPhotoRequest::#{e.class}::#{e.message}")
+          photos = {}
+        end
+        photos
+      end
+
       def fetch_photos(num_of_photos)
-        params = "featrue=popular&rpp=#{num_of_photos}"\
-          "&image_size=#{LARGE_IMAGE_PARAM},#{SMALL_IMAGE_PARAM}"
-        photos = JSON.parse(@access_token.get("/v1/photos?#{params}").body)['photos']
-        puts photos
-        images(photos)
+        images = []
+        total_requested = 0
+        while images.length < num_of_photos do
+          per_page = total_requested.gcd(num_of_photos - images.length)
+          page = 1 + (total_requested / per_page)
+          photos = api_photos_request_wrapper(per_page, page)
+          images.concat(images(photos))
+          total_requested += per_page
+        end
+        images
       end
 
       def images(photos)

@@ -72,7 +72,7 @@ module PixelFinder
       def exif_has_required_tags?(exif)
         tags = ['Make', 'Model', 'LensModel', 'ExposureTime', 'FNumber',
                 'ISO', 'FocalLength']
-        tags.any? { |k| exif.key?(k) && exif[k].present? }
+        tags.all? { |k| exif.key?(k) && exif[k].present? }
       end
 
     end

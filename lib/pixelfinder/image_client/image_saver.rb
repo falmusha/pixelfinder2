@@ -26,9 +26,14 @@ module PixelFinder
         end
 
         def find_camera(camera)
-          manufacturer = find_manufacturer(camera[:make])
-          Camera.find_or_create_by(model: camera[:model],
-                                   manufacturer: manufacturer)
+          if camera[:make].blank?
+            camera = Camera.find_or_create_by(model: camera[:model])
+          else
+            manufacturer = find_manufacturer(camera[:make])
+            Camera.find_or_create_by(model: camera[:model],
+                                     manufacturer: manufacturer)
+          end
+          camera
         end
 
         def find_lens(lens)
