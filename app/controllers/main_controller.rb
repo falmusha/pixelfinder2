@@ -11,14 +11,16 @@ class MainController < ApplicationController
     else
       filters = {}
       if params[:camera].present?
-        filters[:camera] = Camera.find_by(model: params[:camera])
+        filters[:camera] = Camera.find_by(model: params[:camera].strip.downcase)
       end
       if params[:lens].present?
-        filters[:lens] = Lens.find_by(model: params[:lens])
+        filters[:lens] = Lens.find_by(model: params[:lens].strip.downcase)
       end
-      filters[:focal_length] = params[:focal_length] if params[:focal_length].present?
-      filters[:aperture] = params[:aperture] if params[:aperture].present?
-      filters[:iso] = params[:iso] if params[:iso].present?
+      if params[:focal_length].present?
+        filters[:focal_length] = params[:focal_length].strip.downcase
+      end
+      filters[:aperture] = params[:aperture].to_i if params[:aperture].present?
+      filters[:iso] = params[:iso].to_i if params[:iso].present?
       if filters.blank?
         @images = {}
       else

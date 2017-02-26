@@ -1,7 +1,7 @@
 require 'pixelfinder/image_client/image_source_client'
 require 'rubygems'
 require 'oauth'
-require 'multi_json'
+require 'json'
 
 module PixelFinder
   module ImageClient
@@ -34,7 +34,8 @@ module PixelFinder
       def fetch_photos(num_of_photos)
         params = "featrue=popular&rpp=#{num_of_photos}"\
           "&image_size=#{LARGE_IMAGE_PARAM},#{SMALL_IMAGE_PARAM}"
-        photos = MultiJson.decode(@access_token.get("/v1/photos?#{params}").body)['photos']
+        photos = JSON.parse(@access_token.get("/v1/photos?#{params}").body)['photos']
+        puts photos
         images(photos)
       end
 
@@ -67,18 +68,30 @@ module PixelFinder
       end
 
       def format_exif(exif)
-        { camera: { make: exif['camera'].split.first, model: exif['camera'] },
-          lens: { make: {}, model: exif['lens'] },
-          shutter_speed: exif['shutter_speed'],
-          aperture: exif['aperture'],
+        camera = find_camera(exif['camera'])
+        { camera: camera,
+          lens: { make: {}, model: exif['lens'].strip.downcase },
+          shutter_speed: exif['shutter_speed'].strip.downcase,
+          aperture: exif['aperture'].strip.downcase,
           iso: exif['iso'].to_i,
           focal_length: exif['focal_length'].to_i }
+      end
+
+      def find_camera(camera)
+        camera.strip!
+        camera.downcase!
+        make = camera.split.first
+        if Manufacturer.exists?(name: make)
+          { make: make, model: camera }
+        else
+          { make: {}, model: camera }
+        end
       end
 
       def exif_has_required_tags?(exif)
         tags = ['camera', 'lens', 'shutter_speed', 'aperture',
                 'iso', 'focal_length', 'user']
-        tags.any? { |k| exif.key?(k) && exif[k].present? }
+        tags.all? { |k| exif.key?(k) && exif[k].present? }
       end
 
     end
