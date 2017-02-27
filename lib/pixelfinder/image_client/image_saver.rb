@@ -30,7 +30,7 @@ module PixelFinder
             camera = Camera.find_or_create_by(model: camera[:model])
           else
             manufacturer = find_manufacturer(camera[:make])
-            Camera.find_or_create_by(model: camera[:model],
+            camera = Camera.find_or_create_by(model: camera[:model],
                                      manufacturer: manufacturer)
           end
           camera
