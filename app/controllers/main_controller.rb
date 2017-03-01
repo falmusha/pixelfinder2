@@ -10,11 +10,11 @@ class MainController < ApplicationController
       @images = Image.page(params[:page]).per(PER_PAGE)
     else
       filters = {}
-      if params[:camera].present?
-        filters[:camera] = Camera.find_by(model: params[:camera].strip.downcase)
+      if params[:camera_id].present?
+        filters[:camera] = Camera.find(params[:camera_id])
       end
-      if params[:lens].present?
-        filters[:lens] = Lens.find_by(model: params[:lens].strip.downcase)
+      if params[:lens_id].present?
+        filters[:lens] = Lens.find(params[:lens_id])
       end
       if params[:focal_length].present?
         filters[:focal_length] = params[:focal_length].strip.downcase

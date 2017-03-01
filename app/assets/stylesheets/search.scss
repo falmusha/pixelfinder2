@@ -15,21 +15,44 @@
 #filters-form .filters-list .filter {
   display: block;
   padding: 5px;
+  width: 104px;
 }
 
 #filters-form .filters-list .filter input[type="text"] {
-  width: 120px;
+  width: 100%;
   background: transparent;
   border: none;
-  border-bottom: solid 1px black;
+  border-bottom: solid 1px rgba(0, 0, 0, 0.60);
   font-size: 18px;
 
   &:focus {
     outline: none;
+    border-bottom: solid 2px black;
   }
 }
 
-#filters-form .filters-list ul.autocomplete-list {
+#filters-form .filters-list .filter input[type="submit"] {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.80);
+  border: 1px solid rgba(0, 0, 0, 0.80);
+  font-size: 16px;
+  color: white;
+
+  -o-transition: background-color .2s ease-in;
+  -moz-transition: background-color .2s ease-in;
+  -webkit-transition: background-color .2s ease-in;
+  transition: background-color .2s ease-in;
+
+  &:hover {
+    background-color: black;
+    border: 1px solid black;
+  }
+}
+
+#filters-form .filters-list .filter .autocomplete ul.list {
+  margin: 0px;
+  padding: 0px;
   display: none;
   position: absolute;
   box-shadow: 1px 2px 6px;
@@ -39,17 +62,28 @@
   z-index: 1;
 }
 
-#filters-form .filters-list ul.autocomplete-list.shown {
+#filters-form .filters-list .filter .autocomplete ul.list.shown {
   display: block;
 }
 
-#filters-form .filters-list ul.autocomplete-list li {
+#filters-form .filters-list .filter .autocomplete ul.list li {
   display: none;
   list-style: none;
+  padding: 5px;
+
+  &:hover {
+    background-color: black;
+    color: white;
+  }
 }
 
-#filters-form .filters-list ul.autocomplete-list li.shown {
+#filters-form .filters-list .filter .autocomplete ul.list li.shown {
   display: block;
+}
+
+#filters-form .filters-list .filter .autocomplete ul.list li.selected {
+  background-color: black;
+  color: white;
 }
 
 #search-page .images-list {

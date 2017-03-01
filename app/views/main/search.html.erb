@@ -1,38 +1,54 @@
 <div id="search-page">
-  <%= form_tag '/search', method: 'get', id: 'filters-form' do %>
+  <%= form_tag '/search', method: 'get', id: 'filters-form', enforce_utf8: false,  autocomplete: 'off' do %>
 
     <div class="filters-list">
+
       <div class="filter">
-        <%= text_field_tag :camera, nil, placeholder: 'camera name' %>
-        <%= content_tag :ul, class: 'autocomplete-list' do %>
-          <% Camera.all.each do |camera| %>
-            <%= content_tag :li, camera.model %>
+        <%= text_field_tag nil, nil, placeholder: 'camera', class: 'visible' %>
+        <div class="autocomplete">
+          <%= text_field_tag :camera_id, nil, hidden: true, class: 'shadow' %>
+          <%= content_tag :ul, class: 'list' do %>
+            <% Camera.all.each do |camera| %>
+              <%= content_tag :li, camera.model, id: camera.id %>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
+
       <div class="filter">
-        <%= text_field_tag :lens, nil, placeholder: 'lens name' %>
-        <%= content_tag :ul, class: 'autocomplete-list' do %>
-          <% Lens.all.each do |lens| %>
-            <%= content_tag :li, lens.model %>
+        <%= text_field_tag nil, nil, placeholder: 'lens', class: 'visible' %>
+        <div class="autocomplete">
+          <%= text_field_tag :lens_id, nil, hidden: true, class: 'shadow' %>
+          <%= content_tag :ul, class: 'list' do %>
+            <% Lens.all.each do |lens| %>
+              <%= content_tag :li, lens.model, id: lens.id %>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
+
       <div class="filter">
         <%= text_field_tag :focal_length, nil, placeholder: 'focal length' %>
       </div>
+
       <div class="filter">
         <%= text_field_tag :aperture, nil, placeholder: 'aperture' %>
       </div>
+
       <div class="filter">
-        <%= text_field_tag :shutter_speed, nil, placeholder: 'shutter speed' %>
+        <%= text_field_tag :shutter_speed, nil, placeholder: 'shutter' %>
       </div>
+
       <div class="filter">
         <%= text_field_tag :iso, nil, placeholder: 'iso' %>
       </div>
+
+      <div class="filter">
+        <%= submit_tag 'search' %>
+      </div>
+
     </div>
 
-    <%= submit_tag 'search', style: 'display: none' %>
   <% end %>
 
   <div class="images-list">
