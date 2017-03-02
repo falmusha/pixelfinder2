@@ -1,5 +1,5 @@
 class Camera < ApplicationRecord
-  belongs_to :manufacturer
+  belongs_to :manufacturer, optional: true
   belongs_to :sensor_type, optional: true
   has_many :images
 
