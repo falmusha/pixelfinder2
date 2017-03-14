@@ -1,5 +1,5 @@
 <div id="search-page">
-  <%= form_tag '/search', method: 'get', id: 'filters-form', enforce_utf8: false,  autocomplete: 'off' do %>
+  <%= form_tag '/search', method: 'get', id: 'filters-form', enforce_utf8: false, autocomplete: 'off' do %>
 
     <div class="filters-list">
 
@@ -43,8 +43,8 @@
         <%= text_field_tag :iso, nil, placeholder: 'iso' %>
       </div>
 
-      <div class="filter">
-        <%= submit_tag 'search' %>
+      <div id="search-button" class="filter">
+        <%= button_tag 'search', type: :button %>
       </div>
 
     </div>
