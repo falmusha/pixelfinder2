@@ -43,6 +43,8 @@
         <%= text_field_tag :iso, nil, placeholder: 'iso' %>
       </div>
 
+      <%= hidden_field_tag 'commit', 'true' %>
+
       <div id="search-button" class="filter">
         <%= button_tag 'search', type: :button %>
       </div>
