@@ -1,25 +1,24 @@
 source 'https://rubygems.org'
 
+ruby '2.4.2'
+
+gem 'configatron'
+gem 'erubi'
 gem 'flickraw'
-gem 'kaminari'
 gem 'oauth'
-gem 'pg'
-gem 'puma', '~> 3.0'
-gem 'rails', '~> 5.1.0.beta1'
-gem 'rails-ujs'
-gem 'sass-rails', '~> 5.0'
-gem 'turbolinks', '~> 5'
-gem 'uglifier', '>= 1.3.0'
+gem 'roda'
+gem 'sass'
+gem 'sequel'
+gem 'sequel_pg'
+gem 'tilt', '>= 2'
+gem 'rake'
 
-group :development, :test do
-  gem 'byebug', platform: :mri
-  gem 'factory_girl_rails'
-  gem 'rspec-rails'
+group :test, :development do
+  gem 'byebug'
+  gem 'rspec', '~> 3.6'
 end
 
-group :development do
-  gem 'listen', '~> 3.0.5'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'web-console', '>= 3.3.0'
+group :production do
+  gem 'puma'
 end
+

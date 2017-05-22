@@ -1,5 +1,9 @@
-# This file is used by Rack-based servers to start the application.
+require 'rubygems'
+require 'bundler/setup'
 
-require_relative 'config/environment'
+# add lib directory to load path
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
 
-run Rails.application
+require 'pxfinder'
+
+run Pxfinder::Web::App.freeze.app

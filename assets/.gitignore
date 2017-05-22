@@ -1,0 +1,14 @@
+# OS X
+*.DS_Store
+
+# Node
+node_modules
+npm-debug.log
+.npm
+build
+
+# VS Code
+*.vscode
+
+# js map files
+*.js.map

@@ -1,6 +1,45 @@
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+# add lib directory to load path
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
 
-require_relative 'config/application'
+require 'pxfinder'
 
-Rails.application.load_tasks
+Rake.add_rakelib 'lib/tasks'
+
+task :default => :server
+
+namespace :db do
+  require 'sequel'
+
+  desc 'Run migrations'
+  task :migrate, [:version] do |_, args|
+    DB = Sequel::Model.db
+    if args[:version]
+      puts 'Migrating to version #{args[:version]}'
+      Sequel::Migrator.apply(DB, 'db/migrations', args[:version].to_i)
+    else
+      puts 'Migrating to latest'
+      Sequel::Migrator.apply(DB, 'db/migrations')
+    end
+  end
+
+  desc 'Drop all tables from database'
+  task :drop do
+    DB = Sequel::Model.db
+    Sequel::Migrator.apply(DB, 'db/migrations', 0)
+  end
+end
+
+task :console do
+  trap('INT', 'IGNORE')
+  dir, base = File.split(FileUtils::RUBY)
+  cmd = if base.sub!(/\Aruby/, 'irb')
+          File.join(dir, base)
+        else
+          "#{FileUtils::RUBY} -S irb"
+        end
+  sh "#{cmd} -I ./lib -r ./lib/pxfinder"
+end
+
+task :server do
+  sh "rerun -p '**/*.{rb,erb}' 'rackup'"
+end

@@ -1,0 +1,84 @@
+@import "~react-select/scss/select.scss";
+@import "colors";
+
+$select-input-bg: $pxf-white-color;
+$select-input-bg-disabled: $pxf-lightest-color;
+$select-input-border-color: $pxf-dark-color;
+$select-input-border-radius: 0px;
+$select-input-border-focus: $pxf-light-color; // blue
+$select-input-box-shadow-focus: inset 0 1px 2px rgba(0, 0, 0, 0.1),
+  0 0 5px -1px fade($select-input-border-focus, 50%);
+$select-input-border-width: 1px;
+$select-input-height: 36px;
+$select-input-internal-height: (
+  $select-input-height - ($select-input-border-width * 2)
+);
+$select-input-placeholder: $pxf-medium-color;
+$select-text-color: $pxf-dark-color;
+$select-link-hover-color: $select-input-border-focus;
+$select-input-hover-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+
+$select-padding-vertical: 8px;
+$select-padding-horizontal: 10px;
+
+// // menu options
+$select-menu-zindex: 1000;
+$select-menu-max-height: 200px;
+$select-menu-box-shadow: $select-input-hover-box-shadow;
+
+$select-option-color: lighten($select-text-color, 20%);
+$select-option-bg: $select-input-bg;
+$select-option-focused-color: $select-text-color;
+$select-option-focused-bg: $pxf-light-color;
+$select-option-selected-color: $select-text-color;
+$select-option-selected-bg: $pxf-lightest-color;
+$select-option-disabled-color: lighten($select-text-color, 60%);
+
+$select-noresults-color: lighten($select-text-color, 40%);
+
+// clear "x" button
+$select-clear-size: floor(($select-input-height / 2));
+$select-clear-color: $pxf-medium-color;
+$select-clear-hover-color: #d0021b; // red
+$select-clear-width: ($select-input-internal-height / 2);
+
+// arrow indicator
+$select-arrow-color: $pxf-medium-color;
+$select-arrow-color-hover: $pxf-dark-color;
+$select-arrow-width: 5px;
+
+// loading indicator
+$select-loading-size: 16px;
+$select-loading-color: $select-text-color;
+$select-loading-color-bg: $select-input-border-color;
+
+// multi-select item
+$select-item-border-radius: 2px;
+$select-item-gutter: 5px;
+$select-item-padding-vertical: 2px;
+$select-item-padding-horizontal: 5px;
+$select-item-font-size: 0.9em;
+$select-item-color: $pxf-light-color; // pale blue
+$select-item-bg: $pxf-white-color;
+$select-item-border-color: darken($select-item-bg, 10%);
+$select-item-hover-color: darken($select-item-color, 5%); // pale blue
+$select-item-hover-bg: darken($select-item-bg, 5%);
+$select-item-disabled-color: $pxf-dark-color;
+$select-item-disabled-bg: $pxf-lightest-color;
+$select-item-disabled-border-color: darken($select-item-disabled-bg, 10%);
+
+@import "~react-select/scss/components.scss";
+
+.Select-control {
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+}
+
+.Select-placeholder {
+  font-size: small;
+}
+
+.Select-menu-outer {
+  font-size: smaller;
+}
