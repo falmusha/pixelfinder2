@@ -5,12 +5,17 @@ module Pxfinder
   module Models
     def self.included(_)
       init if @db.nil?
-      load_models unless @model_loaded
+      load_models unless @models_loaded
     end
 
     def self.init
       connect
       init_sequel_plugins
+
+      # migrate database
+      migrating_dir = File.join(File.dirname(__FILE__), "../../db/migrations")
+      Sequel::Migrator.apply(@db, migrating_dir)
+
       freeze_db if ENV['RACK_ENV'] != 'development'
     end
 
@@ -42,13 +47,12 @@ module Pxfinder
     end
 
     def self.load_models
-      migrating_dir = File.join(File.dirname(__FILE__), '../../db/migrations')
-      if Sequel::Migrator.is_current?(@db, migrating_dir)
-        Dir.glob(File.join(File.dirname(__FILE__), 'models/*.rb')).each do |f|
-          require f
-        end
-        @model_loaded = true
-      end
+      require 'pxfinder/models/camera'
+      require 'pxfinder/models/creator'
+      require 'pxfinder/models/lens'
+      require 'pxfinder/models/manufacturer'
+      require 'pxfinder/models/photo'
+      require 'pxfinder/models/sensor_type'
     end
   end
 end

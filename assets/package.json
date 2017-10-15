@@ -19,6 +19,7 @@
     "@types/rc-slider": "^8.1.1",
     "@types/react": "^16.0.0",
     "@types/react-dom": "^16.0.0",
+    "@types/react-select": "^1.0.59",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.1",
     "node-sass": "^4.5.3",

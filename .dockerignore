@@ -1,0 +1,11 @@
+spec
+docker-run
+
+.rspec
+.git
+.gitignore
+.rubocop.yml
+.ruby-version
+*.DS_Store
+.sass-cache
+.byebug_history

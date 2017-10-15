@@ -1,0 +1,10 @@
+docker run -it --rm -p 3000:3000 \
+  -e FLICKR_API_KEY=$FLICKR_API_KEY \
+  -e FLICKR_SHARED_SECRET=$FLICKR_SHARED_SECRET \
+  -e FHPX_CONSUMER_KEY=$FHPX_CONSUMER_KEY \
+  -e FHPX_CONSUMER_SECRET=$FHPX_CONSUMER_SECRET \
+  -e FHPX_USERNAME=$FHPX_USERNAME \
+  -e FHPX_PASSWORD=$FHPX_PASSWORD \
+  -e DATABASE_URL="postgresql://$(whoami):@docker.for.mac.localhost/pxfinder_dev" \
+  -e SECRET_KEY_BASE=dsjdlksjdklsjljw2 \
+  pxfinder/app:latest $1

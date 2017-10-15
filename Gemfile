@@ -6,12 +6,12 @@ gem 'configatron'
 gem 'erubi'
 gem 'flickraw'
 gem 'oauth'
+gem 'rake'
 gem 'roda'
 gem 'sass'
 gem 'sequel'
 gem 'sequel_pg'
 gem 'tilt', '>= 2'
-gem 'rake'
 
 group :test, :development do
   gem 'byebug'
@@ -21,4 +21,3 @@ end
 group :production do
   gem 'puma'
 end
-
