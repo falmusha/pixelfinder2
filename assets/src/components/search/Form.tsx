@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Immutable from "immutable";
 import { style } from "typestyle";
 import Select, { Options, Option } from "react-select";
-import Slider, { RangeValue } from "./Form/Slider";
+import Slider, { Range } from "./Form/Slider";
 import { Camera, Lens } from "../../client";
 
 import "../../../styles/react-select.scss";
@@ -19,14 +19,10 @@ interface State {
   cameraName: string;
   lensId: string;
   lensName: string;
-  minFocalLength: string;
-  maxFocalLength: string;
-  minAperture: string;
-  maxAperture: string;
-  minShutter: string;
-  maxShutter: string;
-  minISO: string;
-  maxISO: string;
+  focalLength: Range;
+  aperture: Range;
+  shutter: Range;
+  iso: Range;
 }
 
 class Form extends React.Component<Props, State> {
@@ -37,14 +33,10 @@ class Form extends React.Component<Props, State> {
       cameraName: "",
       lensId: "",
       lensName: "",
-      minFocalLength: "",
-      maxFocalLength: "",
-      minAperture: "",
-      maxAperture: "",
-      minShutter: "",
-      maxShutter: "",
-      minISO: "",
-      maxISO: ""
+      focalLength: { disabled: true, value: { min: "5", max: "200" } },
+      aperture: { disabled: true, value: { min: "1", max: "5" } },
+      shutter: { disabled: true, value: { min: "1", max: "5" } },
+      iso: { disabled: true, value: { min: "4", max: "20" } }
     };
   }
 
@@ -61,57 +53,57 @@ class Form extends React.Component<Props, State> {
   }
 
   stateToMap() {
-    let sMap = Immutable.Map<string, string>();
-    return sMap
+    const { focalLength, aperture, shutter, iso } = this.state;
+    let params = Immutable.Map<string, string>()
       .set("camera_id", this.state.cameraId)
-      .set("lens_id", this.state.lensId)
-      .set("min_focal_length", this.state.minFocalLength)
-      .set("max_focal_length", this.state.maxFocalLength)
-      .set("min_aperture", this.state.minAperture)
-      .set("max_aperture", this.state.maxAperture)
-      .set("min_shutter", this.state.minShutter)
-      .set("max_shutter", this.state.maxShutter)
-      .set("min_iso", this.state.minISO)
-      .set("max_iso", this.state.maxISO);
+      .set("lens_id", this.state.lensId);
+
+    if (!focalLength.disabled) {
+      params = params
+        .set("min_focal_length", focalLength.value.min)
+        .set("max_focal_length", focalLength.value.max);
+    }
+    if (!aperture.disabled) {
+      params = params
+        .set("min_aperture", aperture.value.min)
+        .set("max_aperture", aperture.value.max);
+    }
+    if (!shutter.disabled) {
+      params = params
+        .set("min_shutter", shutter.value.min)
+        .set("max_shutter", shutter.value.max);
+    }
+    if (!iso.disabled) {
+      params = params
+        .set("min_iso", iso.value.min)
+        .set("max_iso", iso.value.max);
+    }
+    return params;
   }
-
-  onCameraChange = (option: Option<string>) => {
-    if (option) {
-      this.setState({
-        cameraId: option.value || "",
-        cameraName: option.label || ""
-      });
-    }
-  };
-
-  onLensChange = (option: Option<string>) => {
-    if (option) {
-      this.setState({
-        lensId: option.value || "",
-        lensName: option.label || ""
-      });
-    }
-  };
-
-  onFocalLengthChange = (range: RangeValue) => {
-    this.setState({ minFocalLength: range.min, maxFocalLength: range.max });
-  };
-
-  onApertureChange = (range: RangeValue) => {
-    this.setState({ minAperture: range.min, maxAperture: range.max });
-  };
-
-  onShutterChange = (range: RangeValue) => {
-    // this is intentionally inverted for UX
-    this.setState({ minShutter: range.max, maxShutter: range.min });
-  };
-
-  onISOChange = (range: RangeValue) => {
-    this.setState({ minISO: range.min, maxISO: range.max });
-  };
 
   onSearchClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
     this.props.onSubmit(this.stateToMap());
+  };
+
+  onOptionsChange = (name: "camera" | "lens") => {
+    return (option: Option<string>) => {
+      const value = option ? option.value || "" : "";
+      const label = option ? option.label || "" : "";
+      const optionsId = name == "camera" ? "cameraId" : "lensId";
+      const optionsName = name == "camera" ? "cameraName" : "lensName";
+      this.setState({ [optionsId]: value, [optionsName]: label } as any);
+    };
+  };
+
+  onSliderChange = (name: keyof State, inverted: boolean = false) => {
+    return (range: Range) => {
+      let _range = range;
+      if (inverted) {
+        _range.value.min = range.value.max;
+        _range.value.max = range.value.min;
+      }
+      this.setState({ [name]: _range } as any);
+    };
   };
 
   render() {
@@ -123,7 +115,7 @@ class Form extends React.Component<Props, State> {
               value={this.state.cameraId}
               options={this.camerasList()}
               placeholder={"Camera"}
-              onChange={this.onCameraChange}
+              onChange={this.onOptionsChange("camera")}
             />
           </div>
           <div className={formItemStyle}>
@@ -131,20 +123,36 @@ class Form extends React.Component<Props, State> {
               value={this.state.lensId}
               options={this.lensList()}
               placeholder={"Lens"}
-              onChange={this.onLensChange}
+              onChange={this.onOptionsChange("lens")}
             />
           </div>
           <div className={formItemStyle}>
-            <Slider for="focal-length" onChange={this.onFocalLengthChange} />
+            <Slider
+              for="focal-length"
+              range={this.state.focalLength}
+              onChange={this.onSliderChange("focalLength")}
+            />
           </div>
           <div className={formItemStyle}>
-            <Slider for="aperture" onChange={this.onApertureChange} />
+            <Slider
+              for="aperture"
+              range={this.state.aperture}
+              onChange={this.onSliderChange("aperture")}
+            />
           </div>
           <div className={formItemStyle}>
-            <Slider for="shutter-speed" onChange={this.onShutterChange} />
+            <Slider
+              for="shutter-speed"
+              range={this.state.shutter}
+              onChange={this.onSliderChange("shutter")}
+            />
           </div>
           <div className={formItemStyle}>
-            <Slider for="iso" onChange={this.onISOChange} />
+            <Slider
+              for="iso"
+              range={this.state.iso}
+              onChange={this.onSliderChange("iso")}
+            />
           </div>
           <button onClick={this.onSearchClick} className={formButtonStyle}>
             Search

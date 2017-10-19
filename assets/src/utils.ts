@@ -41,6 +41,9 @@ export function getPhotoMeta(url: string): Promise<PhotoMeta> {
         width: currentImg.naturalWidth
       });
     });
+    img.addEventListener("error", ev => {
+      resolve(undefined);
+    });
     img.src = url;
   });
 }

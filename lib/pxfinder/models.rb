@@ -10,19 +10,27 @@ module Pxfinder
 
     def self.init
       connect
-      init_sequel_plugins
+      init_sequel_model_plugins
 
       # migrate database
-      migrating_dir = File.join(File.dirname(__FILE__), "../../db/migrations")
+      migrating_dir = File.join(File.dirname(__FILE__), '../../db/migrations')
       Sequel::Migrator.apply(@db, migrating_dir)
 
       freeze_db if ENV['RACK_ENV'] != 'development'
     end
 
     def self.connect
+      # init global db extensions
+      Sequel.extension(:migration)
+
       @db = Sequel.connect(configatron.db_url)
-      @db.extension :freeze_datasets
-      @db.extension :pg_json
+
+      # init db instance extensions
+      @db.extension(:connection_validator)
+      @db.extension(:pg_json)
+      @db.extension(:freeze_datasets)
+
+      @db.pool.connection_validation_timeout = -1
       # @db.loggers << $log
 
       return unless ENV['RACK_ENV'] == 'development'
@@ -30,9 +38,7 @@ module Pxfinder
       Sequel::Model.cache_associations = false
     end
 
-    def self.init_sequel_plugins
-      Sequel.extension :migration
-
+    def self.init_sequel_model_plugins
       Sequel::Model.plugin(:validation_helpers)
       Sequel::Model.plugin(:auto_validations)
       Sequel::Model.plugin(:prepared_statements)

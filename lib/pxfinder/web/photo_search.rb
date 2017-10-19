@@ -19,6 +19,7 @@ module Pxfinder
         Pxfinder::Models::Photo.where(@filters).eager(:creator)
                                .offset((@page - 1) * PHOTOS_PER_PAGE)
                                .limit(PHOTOS_PER_PAGE)
+                               .order(:camera_id)
       end
 
       def extract_filters(params)

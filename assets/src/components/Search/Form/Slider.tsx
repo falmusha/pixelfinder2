@@ -4,18 +4,12 @@ import Slider, { Range as _Range, Marks } from "rc-slider";
 
 import "../../../../styles/checkbox.scss";
 
-export type RangeValue = {
-  min: string;
-  max: string;
-};
+export type Range = { value: { min: string; max: string }; disabled: boolean };
 
 interface Props {
   for: "focal-length" | "aperture" | "shutter-speed" | "iso";
-  onChange: (range: RangeValue) => void;
-}
-
-interface State {
-  disabled: boolean;
+  range: Range;
+  onChange: (range: Range) => void;
 }
 
 const MARKS = {
@@ -116,96 +110,111 @@ function iso(value: number) {
   return ISO[value];
 }
 
-const FocalLengthSlider = (props: Props, state: State) => {
+const FocalLengthSlider = (props: Props) => {
+  const min = parseInt(props.range.value.min);
+  const max = parseInt(props.range.value.max);
   return (
     <Range
       min={5}
       max={1000}
-      defaultValue={[5, 200]}
+      defaultValue={[min, max]}
       marks={MARKS[props.for]}
-      disabled={state.disabled}
+      disabled={props.range.disabled}
       tipFormatter={(value: number) => `${value}mm`}
       onChange={(value: number[]) =>
-        props.onChange({ min: value[0].toString(), max: value[1].toString() })}
+        props.onChange({
+          ...props.range,
+          value: { min: value[0].toString(), max: value[1].toString() }
+        })}
     />
   );
 };
 
-const ApertureSlider = (props: Props, state: State) => {
+const ApertureSlider = (props: Props) => {
+  const min = parseInt(props.range.value.min);
+  const max = parseInt(props.range.value.max);
   return (
     <Range
       min={-2}
       max={10}
       step={1}
-      defaultValue={[1, 5]}
+      defaultValue={[min, max]}
       marks={MARKS[props.for]}
-      disabled={state.disabled}
+      disabled={props.range.disabled}
       tipFormatter={(value: number) => `f/${fstop(value)}`}
       onChange={(value: number[]) =>
         props.onChange({
-          min: `${fstop(value[0])}`,
-          max: `${fstop(value[1])}`
+          ...props.range,
+          value: {
+            min: `${fstop(value[0])}`,
+            max: `${fstop(value[1])}`
+          }
         })}
     />
   );
 };
 
-const ShutterSpeedSlider = (props: Props, state: State) => {
+const ShutterSpeedSlider = (props: Props) => {
+  const min = parseInt(props.range.value.min);
+  const max = parseInt(props.range.value.max);
   return (
     <Range
       min={0}
       max={20}
-      defaultValue={[1, 5]}
+      defaultValue={[min, max]}
       marks={MARKS[props.for]}
-      disabled={state.disabled}
+      disabled={props.range.disabled}
       tipFormatter={(value: number) => `${shutterSpeed(value)}s`}
       onChange={(value: number[]) =>
         props.onChange({
-          min: `${shutterSpeed(value[0])}`,
-          max: `${shutterSpeed(value[1])}`
+          ...props.range,
+          value: {
+            min: `${shutterSpeed(value[0])}`,
+            max: `${shutterSpeed(value[1])}`
+          }
         })}
     />
   );
 };
 
-const ISOSlider = (props: Props, state: State) => {
+const ISOSlider = (props: Props) => {
+  const min = parseInt(props.range.value.min);
+  const max = parseInt(props.range.value.max);
   return (
     <Range
       min={0}
       max={31}
-      defaultValue={[4, 20]}
+      defaultValue={[min, max]}
       marks={MARKS[props.for]}
-      disabled={state.disabled}
+      disabled={props.range.disabled}
       tipFormatter={(value: number) => `${iso(value)}s`}
       onChange={(value: number[]) =>
         props.onChange({
-          min: `${iso(value[0])}`,
-          max: `${iso(value[1])}`
+          ...props.range,
+          value: {
+            min: `${iso(value[0])}`,
+            max: `${iso(value[1])}`
+          }
         })}
     />
   );
 };
 
-class FormSlider extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { disabled: true };
-  }
-
+class FormSlider extends React.PureComponent<Props> {
   onCheckboxChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ disabled: !ev.target.checked });
+    this.props.onChange({ ...this.props.range, disabled: !ev.target.checked });
   };
 
   renderSlider() {
     switch (this.props.for) {
       case "focal-length":
-        return FocalLengthSlider(this.props, this.state);
+        return FocalLengthSlider(this.props);
       case "aperture":
-        return ApertureSlider(this.props, this.state);
+        return ApertureSlider(this.props);
       case "shutter-speed":
-        return ShutterSpeedSlider(this.props, this.state);
+        return ShutterSpeedSlider(this.props);
       case "iso":
-        return ISOSlider(this.props, this.state);
+        return ISOSlider(this.props);
       default:
         return null;
     }

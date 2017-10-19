@@ -59,16 +59,25 @@ class Search extends React.Component<{}, State> {
   }
 
   toGridPhotos = (photos: Photo[], photosMeta: PhotoMeta[]) => {
-    return photos.map((photo, index) => {
-      return {
-        src: photo.photo_url,
-        thumbnail: photo.thumbnail_url,
-        thumbnailWidth: photosMeta[index].width,
-        thumbnailHeight: photosMeta[index].height,
-        caption: `© ${photo.creator.name} / ${photo.source}`,
-        customOverlay: <PhotoGridItemOverlay photo={photo} />,
-        thumbnailCaption: <PhotoGridItemCaption photo={photo} />
-      };
+    let thumbnails = photos.map((photo, index) => {
+      if (photosMeta[index] === undefined) {
+        // This removes images that are invalid (do not exist)
+        return undefined;
+      } else {
+        return {
+          src: photo.photo_url,
+          thumbnail: photo.thumbnail_url,
+          thumbnailWidth: photosMeta[index].width,
+          thumbnailHeight: photosMeta[index].height,
+          caption: `© ${photo.creator.name} / ${photo.source}`,
+          customOverlay: <PhotoGridItemOverlay photo={photo} />,
+          thumbnailCaption: <PhotoGridItemCaption photo={photo} />
+        };
+      }
+    });
+
+    return thumbnails.filter(t => {
+      return t !== undefined;
     });
   };
 
@@ -87,17 +96,14 @@ class Search extends React.Component<{}, State> {
   };
 
   updatePhotos = async () => {
+    let gridPhotos: any = [];
     try {
-      const newGridPhotos = await this.fetchPhotos();
-      if (newGridPhotos) {
-        this.setState({
-          gridPhotos: this.state.gridPhotos.concat(newGridPhotos),
-          isLoading: false
-        });
-      }
+      gridPhotos = await this.fetchPhotos();
+      gridPhotos = this.state.gridPhotos.concat(gridPhotos);
     } catch {
       console.error("Couldn't update photos");
     }
+    this.setState({ gridPhotos: gridPhotos, isLoading: false });
   };
 
   onScroll = () => {
@@ -141,6 +147,24 @@ class Search extends React.Component<{}, State> {
     });
   };
 
+  renderPhotos = () => {
+    const { gridPhotos, isLoading } = this.state;
+    if (gridPhotos.length > 0) {
+      return <PhotoGrid photos={gridPhotos} />;
+    }
+    if (isLoading) {
+      return (
+        <span className={gridPlaceholderStyle}>
+          (ง •̀_•́)ง Looking for photos
+        </span>
+      );
+    } else {
+      return (
+        <span className={gridPlaceholderStyle}>No photos found ¯\_(ツ)_/¯</span>
+      );
+    }
+  };
+
   render() {
     const { cameras, lenses, gridPhotos, isLoading } = this.state;
     return (
@@ -151,7 +175,7 @@ class Search extends React.Component<{}, State> {
           onSubmit={this.onSubmitSearch}
         />
         {isLoading ? <Spinner location={"bottom-right"} /> : null}
-        {gridPhotos.length > 0 ? <PhotoGrid photos={gridPhotos} /> : null}
+        {this.renderPhotos()}
       </div>
     );
   }
@@ -161,6 +185,12 @@ const searchStyle = style({
   width: "100%",
   display: "flex",
   flexDirection: "column"
+});
+
+const gridPlaceholderStyle = style({
+  paddingTop: 40,
+  margin: "0 auto",
+  fontSize: 40
 });
 
 export default Search;
