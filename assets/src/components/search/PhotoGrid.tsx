@@ -12,14 +12,9 @@ class PhotoGrid extends React.Component<Props, {}> {
   }
 
   render() {
+    const { photos } = this.props;
     const GalleryComponent: any = Gallery;
-    return (
-      <GalleryComponent
-        images={this.props.photos}
-        enableImageSelection={false}
-        enableLightbox={true}
-      />
-    );
+    return <GalleryComponent images={photos} enableImageSelection={false} />;
   }
 }
 

@@ -187,7 +187,7 @@ const ISOSlider = (props: Props) => {
       defaultValue={[min, max]}
       marks={MARKS[props.for]}
       disabled={props.range.disabled}
-      tipFormatter={(value: number) => `${iso(value)}s`}
+      tipFormatter={(value: number) => `${iso(value)} ISO`}
       onChange={(value: number[]) =>
         props.onChange({
           ...props.range,

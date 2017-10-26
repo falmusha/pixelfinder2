@@ -36,7 +36,7 @@ class Form extends React.Component<Props, State> {
       focalLength: { disabled: true, value: { min: "5", max: "200" } },
       aperture: { disabled: true, value: { min: "1", max: "5" } },
       shutter: { disabled: true, value: { min: "1", max: "5" } },
-      iso: { disabled: true, value: { min: "4", max: "20" } }
+      iso: { disabled: true, value: { min: "64", max: "1000" } }
     };
   }
 

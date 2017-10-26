@@ -6,19 +6,17 @@ const extractSass = new ExtractTextPlugin({
   disable: process.env.NODE_ENV === "development"
 });
 
-var config = {
+module.exports = {
   entry: ["./src/App"],
   output: {
     path: path.resolve("../static"),
     filename: "js/bundle.js"
   },
-  devtool: "source-map",
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
   },
   module: {
     rules: [
-      { test: /\.js$/, use: "source-map-loader", enforce: "pre" },
       { test: /\.tsx?$/, use: "ts-loader" },
       { test: /\.css$/, use: ["style-loader", "css-loader"] },
       {
@@ -32,5 +30,3 @@ var config = {
   },
   plugins: [extractSass]
 };
-
-module.exports = config;
