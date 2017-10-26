@@ -3,7 +3,6 @@
     "sourceMap": true,
     "strict": true,
     "module": "commonjs",
-    "allowSyntheticDefaultImports": true,
     "target": "es5",
     "lib": ["es6", "es7", "dom"],
     "jsx": "react"

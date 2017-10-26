@@ -53,7 +53,7 @@ class Search extends React.Component<{}, State> {
 
   componentDidUpdate(prevProps: any, prevState: State) {
     const { photosParams } = this.state;
-    if (prevState.photosParams != photosParams) {
+    if (!prevState.photosParams.equals(photosParams)) {
       this.updatePhotos();
     }
   }
@@ -92,14 +92,14 @@ class Search extends React.Component<{}, State> {
       return this.toGridPhotos(photos, await photosMeta);
     } catch {
       console.error("Couldn't fetch photos");
+      return [];
     }
   };
 
   updatePhotos = async () => {
-    let gridPhotos: any = [];
+    let gridPhotos = this.state.gridPhotos;
     try {
-      gridPhotos = await this.fetchPhotos();
-      gridPhotos = this.state.gridPhotos.concat(gridPhotos);
+      gridPhotos = gridPhotos.concat(await this.fetchPhotos());
     } catch {
       console.error("Couldn't update photos");
     }
