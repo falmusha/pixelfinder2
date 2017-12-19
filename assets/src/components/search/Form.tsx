@@ -115,7 +115,7 @@ class Form extends React.Component<Props, State> {
               value={this.state.cameraId}
               options={this.camerasList()}
               placeholder={"Camera"}
-              onChange={this.onOptionsChange("camera")}
+              onChange={this.onOptionsChange("camera") as any}
             />
           </div>
           <div className={formItemStyle}>
@@ -123,7 +123,7 @@ class Form extends React.Component<Props, State> {
               value={this.state.lensId}
               options={this.lensList()}
               placeholder={"Lens"}
-              onChange={this.onOptionsChange("lens")}
+              onChange={this.onOptionsChange("lens") as any}
             />
           </div>
           <div className={formItemStyle}>

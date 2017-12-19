@@ -1,5 +1,3 @@
-require 'pxfinder/utils/model_name_helpers'
-
 module Pxfinder
   module Utils
     def self.aperture_from(str)

@@ -66,7 +66,7 @@ module Pxfinder
 
     def self.find_lens(lens)
       Lens.find_or_create_by(lens_model: lens[:model], make: lens[:make])
-   end
+    end
 
     def self.find_creator(name)
       Creator.find_or_create(name: name)

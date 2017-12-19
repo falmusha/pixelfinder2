@@ -5,7 +5,7 @@ require 'pxfinder'
 
 Rake.add_rakelib 'lib/tasks'
 
-task :default => :server
+task default: :server
 
 namespace :db do
   require 'sequel'
@@ -14,7 +14,7 @@ namespace :db do
   task :migrate, [:version] do |_, args|
     DB = Sequel::Model.db
     if args[:version]
-      puts 'Migrating to version #{args[:version]}'
+      puts "Migrating to version #{args[:version]}"
       Sequel::Migrator.apply(DB, 'db/migrations', args[:version].to_i)
     else
       puts 'Migrating to latest'
@@ -41,5 +41,5 @@ task :console do
 end
 
 task :server do
-  sh "rerun -p '**/*.{rb,erb}' 'rackup'"
+  sh 'rackup'
 end
